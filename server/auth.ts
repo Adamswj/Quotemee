@@ -44,7 +44,7 @@ export function setupAuth(app: Express) {
   const PgStore = connectPg(session);
 
   const sessionSettings: session.SessionOptions = {
-    secret: process.env.SESSION_SECRET || "quote-app-secret-key-change-in-production",
+    secret: process.env.SESSION_SECRET || (process.env.NODE_ENV === 'production' ? (() => { throw new Error('SESSION_SECRET must be set in production'); })() : 'dev-secret-local-only'),
     resave: false,
     saveUninitialized: false,
     store: new PgStore({

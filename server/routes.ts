@@ -502,17 +502,17 @@ async function seedInitialData() {
     // Create admin user if it doesn't exist
     const adminUser = await storage.getUserByUsername('Admin');
     if (!adminUser) {
-      const adminPassword = await hashPassword('password');
+      const adminPassword = await hashPassword(process.env.ADMIN_PASSWORD || 'changeme-' + Math.random().toString(36).slice(2));
       await storage.createUser({
         id: 'admin-' + Date.now().toString(),
         username: 'Admin',
-        email: 'admin@quotelearn.com',
+        email: process.env.ADMIN_EMAIL || 'admin@quotelearn.com',
         password: adminPassword,
         firstName: 'Admin',
         lastName: 'User',
-        emailVerified: true, // Admin is pre-verified
+        emailVerified: true,
       });
-      console.log('Admin user created (username: Admin, password: password)');
+      console.log('Admin user created (username: Admin)');
     }
     
     // Check if categories already exist, create if needed
