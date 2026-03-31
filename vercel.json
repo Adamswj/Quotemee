@@ -1,6 +1,13 @@
 {
   "buildCommand": "vite build && esbuild server/handler.ts --platform=node --packages=external --bundle --format=esm --outfile=api/index.js",
-  "routes": [
-    { "src": "/(.*)", "dest": "/api/index" }
+  "outputDirectory": "dist/public",
+  "functions": {
+    "api/index.js": {
+      "runtime": "nodejs20.x"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index" },
+    { "source": "/:path*", "destination": "/index.html" }
   ]
 }
