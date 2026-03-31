@@ -33,13 +33,13 @@ export default function Favorites() {
   }, [isAuthenticated, toast]);
 
   // Fetch user favorites
-  const { data: favorites = [], isLoading: favoritesLoading } = useQuery({
+  const { data: favorites = [], isLoading: favoritesLoading } = useQuery<any[]>({
     queryKey: ["/api/favorites"],
     enabled: isAuthenticated,
   });
 
   // Fetch categories
-  const { data: categories = [] } = useQuery({
+  const { data: categories = [] } = useQuery<any[]>({
     queryKey: ["/api/categories"],
     enabled: isAuthenticated,
   });

@@ -18,23 +18,23 @@ export default function Learn() {
   const { isAuthenticated, isLoading } = useAuth();
   const [, setLocation] = useLocation();
 
-  const { data: favorites, isLoading: favoritesLoading } = useQuery({
+  const { data: favorites, isLoading: favoritesLoading } = useQuery<any[]>({
     queryKey: ["/api/favorites"],
     enabled: isAuthenticated,
   });
 
-  const { data: stats, isLoading: statsLoading } = useQuery({
+  const { data: stats, isLoading: statsLoading } = useQuery<any>({
     queryKey: ["/api/user/stats"],
     enabled: isAuthenticated,
   });
 
-  const { data: progress, isLoading: progressLoading } = useQuery({
+  const { data: progress, isLoading: progressLoading } = useQuery<any[]>({
     queryKey: ["/api/progress"],
     enabled: isAuthenticated,
   });
 
   // Fetch spaced repetition study stats
-  const { data: studyStats, isLoading: studyStatsLoading } = useQuery({
+  const { data: studyStats, isLoading: studyStatsLoading } = useQuery<any>({
     queryKey: ["/api/study/stats"],
     enabled: isAuthenticated,
   });

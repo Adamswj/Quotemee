@@ -29,7 +29,7 @@ export default function Quiz() {
   const [quizStarted, setQuizStarted] = useState(false);
   const [quizCompleted, setQuizCompleted] = useState(false);
 
-  const { data: favorites } = useQuery({
+  const { data: favorites } = useQuery<any[]>({
     queryKey: ["/api/favorites"],
     enabled: isAuthenticated,
   });
@@ -105,7 +105,7 @@ export default function Quiz() {
           .map(w => w.replace(/[.,!?;]$/, ''))
           .filter(w => w.length > 2 && w !== correctAnswer);
         
-        const wrongOptions = [...new Set(allWords)]
+        const wrongOptions = Array.from(new Set(allWords))
           .sort(() => Math.random() - 0.5)
           .slice(0, 3);
 
@@ -124,7 +124,7 @@ export default function Quiz() {
           .map(f => f.quote.author)
           .filter(a => a !== correctAnswer);
         
-        const uniqueWrongAuthors = [...new Set(wrongAuthors)];
+        const uniqueWrongAuthors = Array.from(new Set(wrongAuthors));
         const wrongOptions = uniqueWrongAuthors
           .sort(() => Math.random() - 0.5)
           .slice(0, 3);

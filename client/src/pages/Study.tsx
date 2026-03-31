@@ -63,13 +63,13 @@ export default function Study() {
   }, [isAuthenticated, toast]);
 
   // Fetch study session
-  const { data: studyCards = [], isLoading: cardsLoading, refetch: refetchCards } = useQuery({
+  const { data: studyCards = [], isLoading: cardsLoading, refetch: refetchCards } = useQuery<any[]>({
     queryKey: ["/api/study/session"],
     enabled: isAuthenticated,
   });
 
   // Fetch study stats
-  const { data: studyStats } = useQuery({
+  const { data: studyStats } = useQuery<any>({
     queryKey: ["/api/study/stats"],
     enabled: isAuthenticated,
   });

@@ -12,7 +12,7 @@ import { sendVerificationEmail, sendPasswordResetEmail, sendPasswordResetConfirm
 declare global {
   namespace Express {
     interface User {
-      id: number;
+      id: string;
       username: string;
       email: string;
       firstName?: string;
@@ -95,11 +95,10 @@ export function setupAuth(app: Express) {
         console.log(`[AUTH] Login successful for user ${username}`);
         return done(null, {
           id: user.id,
-          username: user.username,
-          email: user.email,
+          username: user.username ?? '',
+          email: user.email ?? '',
           firstName: user.firstName || undefined,
           lastName: user.lastName || undefined,
-          createdAt: user.createdAt || undefined
         });
       } catch (error) {
         console.error(`[AUTH] Login error:`, error);
@@ -109,17 +108,16 @@ export function setupAuth(app: Express) {
   );
 
   passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser(async (id: number, done) => {
+  passport.deserializeUser(async (id: string, done) => {
     try {
-      const user = await storage.getUser(id.toString());
+      const user = await storage.getUser(id);
       if (user) {
         done(null, {
           id: user.id,
-          username: user.username,
-          email: user.email,
+          username: user.username ?? '',
+          email: user.email ?? '',
           firstName: user.firstName || undefined,
           lastName: user.lastName || undefined,
-          createdAt: user.createdAt || undefined
         });
       } else {
         done(null, null);

@@ -15,7 +15,7 @@ export default function Flashcards() {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [favoriteQuotes, setFavoriteQuotes] = useState<Set<number>>(new Set());
 
-  const { data: categories } = useQuery({
+  const { data: categories } = useQuery<any[]>({
     queryKey: ["/api/categories"],
   });
 

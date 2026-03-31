@@ -83,7 +83,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const resetLink = `${baseUrl}/reset-password?token=${token}`;
 
         try {
-          await sendPasswordResetEmail(user.email, user.username, resetLink);
+          await sendPasswordResetEmail(user.email!, user.username!, resetLink);
           console.log(`[AUTH] Password reset email sent to ${user.email}`);
         } catch (emailError) {
           console.error('[AUTH] Failed to send password reset email:', emailError);
@@ -162,7 +162,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = await storage.getUser(tokenRecord.userId);
       if (user) {
         try {
-          await sendPasswordResetConfirmationEmail(user.email, user.username);
+          await sendPasswordResetConfirmationEmail(user.email!, user.username!);
         } catch (emailError) {
           console.error('[AUTH] Failed to send password reset confirmation:', emailError);
         }
