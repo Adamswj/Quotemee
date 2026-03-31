@@ -3,3 +3,6 @@ dist
 .env
 *.zip
 migrations
+api/index.js
+
+.vercel
