@@ -50,6 +50,7 @@ export function setupAuth(app: Express) {
     store: new PgStore({
       conString: process.env.DATABASE_URL,
       tableName: "sessions",
+      createTableIfMissing: true,
     }),
     cookie: {
       secure: process.env.NODE_ENV === "production",
