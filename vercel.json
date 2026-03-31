@@ -1,11 +1,7 @@
 {
+  "framework": null,
   "buildCommand": "vite build && esbuild server/handler.ts --platform=node --packages=external --bundle --format=esm --outfile=api/index.js",
   "outputDirectory": "dist/public",
-  "functions": {
-    "api/index.js": {
-      "maxDuration": 30
-    }
-  },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index" },
     { "source": "/:path*", "destination": "/index.html" }
