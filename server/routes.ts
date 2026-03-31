@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, requireAuth, hashPassword } from "./auth";
+import { allNewQuotes } from "./seedData";
 import { 
   insertQuoteSchema, 
   insertCategorySchema, 
@@ -497,8 +498,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
 async function seedInitialData() {
   try {
-    const { allNewQuotes } = await import('./seedData.js');
-    
     // Create admin user if it doesn't exist
     const adminUser = await storage.getUserByUsername('Admin');
     if (!adminUser) {
