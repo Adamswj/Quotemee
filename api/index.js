@@ -1166,12 +1166,6 @@ function setupAuth(app2) {
           console.log(`[AUTH] Login failed: invalid password`);
           return done(null, false);
         }
-        if (!user.emailVerified) {
-          console.log(`[AUTH] Login failed: email not verified`);
-          return done(null, false, {
-            message: "Please verify your email address before logging in. Check your inbox for the verification link."
-          });
-        }
         console.log(`[AUTH] Login successful for user ${username}`);
         return done(null, {
           id: user.id,
@@ -1227,7 +1221,7 @@ function setupAuth(app2) {
         password: hashedPassword,
         firstName,
         lastName,
-        emailVerified: false
+        emailVerified: true
       });
       const token = generateSecureToken();
       const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1e3);
@@ -1244,14 +1238,16 @@ function setupAuth(app2) {
       } catch (emailError) {
         console.error("[AUTH] Failed to send verification email:", emailError);
       }
-      res.status(201).json({
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        firstName: user.firstName || void 0,
-        lastName: user.lastName || void 0,
-        emailVerified: false,
-        message: "Account created! Please check your email to verify your account before logging in."
+      req.login({ id: user.id, username: user.username ?? "", email: user.email ?? "", firstName: user.firstName || void 0, lastName: user.lastName || void 0 }, (err) => {
+        if (err) return next(err);
+        res.status(201).json({
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName || void 0,
+          lastName: user.lastName || void 0,
+          emailVerified: true
+        });
       });
     } catch (error) {
       console.error("Registration error:", error);

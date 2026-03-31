@@ -85,14 +85,6 @@ export function setupAuth(app: Express) {
           return done(null, false);
         }
 
-        // Check if email is verified
-        if (!user.emailVerified) {
-          console.log(`[AUTH] Login failed: email not verified`);
-          return done(null, false, { 
-            message: "Please verify your email address before logging in. Check your inbox for the verification link." 
-          });
-        }
-        
         console.log(`[AUTH] Login successful for user ${username}`);
         return done(null, {
           id: user.id,
@@ -156,7 +148,7 @@ export function setupAuth(app: Express) {
         password: hashedPassword,
         firstName,
         lastName,
-        emailVerified: false,
+        emailVerified: true,
       });
 
       // Generate email verification token
@@ -181,15 +173,17 @@ export function setupAuth(app: Express) {
         // Continue registration even if email fails
       }
 
-      // DO NOT auto-login unverified users
-      res.status(201).json({ 
-        id: user.id, 
-        username: user.username, 
-        email: user.email,
-        firstName: user.firstName || undefined,
-        lastName: user.lastName || undefined,
-        emailVerified: false,
-        message: "Account created! Please check your email to verify your account before logging in."
+      // Auto-login after registration
+      req.login({ id: user.id, username: user.username ?? '', email: user.email ?? '', firstName: user.firstName || undefined, lastName: user.lastName || undefined }, (err) => {
+        if (err) return next(err);
+        res.status(201).json({
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName || undefined,
+          lastName: user.lastName || undefined,
+          emailVerified: true,
+        });
       });
     } catch (error) {
       console.error("Registration error:", error);
